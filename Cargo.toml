@@ -1,6 +1,6 @@
 [package]
 name = "supercli"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Ultra-low RAM native code editor with project scaffolding explorer and integrated terminal for AI coding agent CLIs"
 
