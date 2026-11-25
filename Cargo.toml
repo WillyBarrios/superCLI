@@ -1,0 +1,24 @@
+[package]
+name = "supercli"
+version = "0.1.0"
+edition = "2021"
+description = "Ultra-low RAM native code editor with project scaffolding explorer and integrated terminal for AI coding agent CLIs"
+
+[dependencies]
+eframe = { version = "0.29", default-features = false, features = ["default_fonts", "glow", "x11", "wayland"] }
+ropey = "1.6"
+portable-pty = "0.8"
+vt100 = "0.15"
+notify = { version = "6.1", default-features = false, features = ["macos_kqueue"] }
+ignore = "0.4"
+rfd = "0.15"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_System_ProcessStatus", "Win32_System_Threading", "Win32_Foundation"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
