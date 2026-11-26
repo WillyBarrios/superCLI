@@ -15,12 +15,12 @@ pub struct AgentPreset {
 
 pub const AGENT_PRESETS: &[AgentPreset] = &[
     AgentPreset {
-        name: "Claude",
-        command: "claude",
+        name: "Antigravity CLI",
+        command: "agy",
     },
     AgentPreset {
-        name: "Gemini",
-        command: "gemini",
+        name: "Claude",
+        command: "claude",
     },
     AgentPreset {
         name: "Codex",
@@ -35,6 +35,30 @@ pub const AGENT_PRESETS: &[AgentPreset] = &[
         command: "opencode",
     },
 ];
+
+/// Opens the system file manager highlighting the given file (or opening the folder).
+pub fn open_file_location(path: &std::path::Path) {
+    #[cfg(windows)]
+    {
+        let mut cmd = std::process::Command::new("explorer.exe");
+        if path.is_file() {
+            cmd.arg(format!("/select,{}", path.display()));
+        } else {
+            cmd.arg(path);
+        }
+        let _ = cmd.spawn();
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        let target = if path.is_dir() {
+            path
+        } else {
+            path.parent().unwrap_or(path)
+        };
+        let _ = std::process::Command::new("xdg-open").arg(target).spawn();
+    }
+}
 
 /// Detects the best interactive shell for the current OS (Windows or Linux).
 pub fn default_shell() -> ShellCommand {

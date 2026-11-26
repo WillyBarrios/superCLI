@@ -102,4 +102,18 @@ impl EditorManager {
     pub fn is_open(&self, path: &Path) -> bool {
         self.tabs.iter().any(|t| t.path.as_deref() == Some(path))
     }
+
+    /// Updates any open tab's path and title after a file is renamed in the project explorer.
+    pub fn notify_renamed(&mut self, old_path: &Path, new_path: &Path) {
+        for doc in &mut self.tabs {
+            if doc.path.as_deref() == Some(old_path) {
+                doc.path = Some(new_path.to_path_buf());
+                doc.title = new_path
+                    .file_name()
+                    .and_then(|n| n.to_str())
+                    .map(|s| s.to_string())
+                    .unwrap_or_else(|| new_path.display().to_string());
+            }
+        }
+    }
 }

@@ -123,6 +123,21 @@ impl ProjectTree {
         Ok(target)
     }
 
+    pub fn rename_path(&mut self, old_path: &Path, new_name: &str) -> io::Result<PathBuf> {
+        let trimmed = new_name.trim();
+        if trimmed.is_empty() {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "El nuevo nombre no puede estar vacío",
+            ));
+        }
+        let parent = old_path.parent().unwrap_or(&self.root);
+        let new_path = parent.join(trimmed);
+        fs::rename(old_path, &new_path)?;
+        self.refresh();
+        Ok(new_path)
+    }
+
     /// Collects matching file paths for Quick Open (Ctrl+P), bounded to keep RAM low.
     pub fn find_files(&self, query: &str, max_results: usize) -> Vec<PathBuf> {
         let q = query.trim().to_lowercase();

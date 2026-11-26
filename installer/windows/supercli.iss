@@ -1,5 +1,5 @@
 #ifndef MyAppVersion
-  #define MyAppVersion "0.1.1"
+  #define MyAppVersion "0.2.0"
 #endif
 
 [Setup]
@@ -13,12 +13,20 @@ DefaultDirName={localappdata}\Programs\superCLI
 DefaultGroupName=superCLI
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
+CloseApplications=force
+RestartApplications=no
 OutputDir=..\..\dist
 OutputBaseFilename=supercli-{#MyAppVersion}-windows-x86_64-setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 ChangesEnvironment=yes
+
+[InstallDelete]
+; Remove any leftover files from previous versions so only the new installation remains
+Type: files; Name: "{app}\supercli.exe"
+Type: files; Name: "{app}\README.md"
+Type: files; Name: "{app}\*.old"
 
 [Languages]
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
